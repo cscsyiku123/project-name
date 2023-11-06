@@ -1,0 +1,9 @@
+env: development
+
+db:
+  mysql:
+    url: localhost
+    port: 3306
+    username: root
+    password:
+    database: nest-course
