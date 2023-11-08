@@ -1,12 +1,11 @@
-http:
-  host: 'localhost'
-  port: 8080
-
+env: development
+jwt:
+  secret: secret
+  expiresIn: 3600
 db:
-  postgres:
-    url: 'localhost'
-    port: 5432
-    database: 'yaml-db'
-
-  sqlite:
-    database: 'sqlite.db'
+  mysql:
+    url: localhost
+    port: 3306
+    username: root
+    password:
+    database: nest-course

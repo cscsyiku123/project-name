@@ -1,6 +1,8 @@
+
 /**
  * 运行环境
  */
+
 export enum EnvironmentType {
   DEVELOPMENT = "development",
   PRODUCTION = "production",
@@ -40,7 +42,7 @@ export class TResponse<T> {
     return new TResponse<T>(ResponseCodeConstants.ERROR.code, ResponseCodeConstants.ERROR.message, data, ResponseCodeConstants.ERROR.code >= 0);
   }
 
-  public getResponse(data: T, responseCode: ResponseCodeConstants): TResponse<T> {
+  public static getResponse<T>(data: T, responseCode: ResponseCodeConstants): TResponse<T> {
     return new TResponse<T>(responseCode.code, responseCode.message, data, responseCode.code >= 0);
   }
 }

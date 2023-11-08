@@ -15,11 +15,9 @@ export class AppController {
   private readonly configService: ConfigService;
   @InjectRepository(UserEntity)
   private usersRepository: Repository<UserEntity>;
+  @Inject()
+  private readonly appService: AppService
 
-
-
-  constructor(private readonly appService: AppService) {
-  }
 
   // @Get()
   // getHello(): string {
