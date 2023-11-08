@@ -36,10 +36,10 @@ export class TResponse<T> {
   }
 
   public  static  getSuccessResponse<T>(data: T): TResponse<T> {
-    return new TResponse<T>(ResponseCodeConstants.SUCCESS.code, ResponseCodeConstants.SUCCESS.message, data, ResponseCodeConstants.SUCCESS.code >= 0);
+    return this.getResponse(data, ResponseCodeConstants.SUCCESS)
   }
   public static getErrorResponse<T>(data: T): TResponse<T> {
-    return new TResponse<T>(ResponseCodeConstants.ERROR.code, ResponseCodeConstants.ERROR.message, data, ResponseCodeConstants.ERROR.code >= 0);
+    return this.getResponse(data, ResponseCodeConstants.ERROR)
   }
 
   public static getResponse<T>(data: T, responseCode: ResponseCodeConstants): TResponse<T> {
