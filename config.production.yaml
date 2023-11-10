@@ -1,7 +1,7 @@
 env: development
 jwt:
   secret: secret
-  expiresIn: 3600
+  expiresIn: 30d
 db:
   mysql:
     url: localhost

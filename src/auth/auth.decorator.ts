@@ -1,6 +1,6 @@
 import { Reflector } from '@nestjs/core';
 
-enum Role {
+export enum Role {
   ADMIN,
   Login,
 

@@ -12,6 +12,7 @@ export enum EnvironmentType {
 export class ResponseCodeConstants {
   public static readonly SUCCESS = new ResponseCodeConstants(0, "成功");
   public static readonly ERROR = new ResponseCodeConstants(-1, "系统错误");
+  public static readonly NO_PERMISSION = new ResponseCodeConstants(-403, "无权限");
 
   code: number;
   message: string;

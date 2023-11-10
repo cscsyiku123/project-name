@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppServicePropertyBaseInjection } from "./app.service-property-base-injection";
 import configuration from "./config/configuration";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfigService } from "./db/db.config";
 import { DataSource } from "typeorm";
 import { UserEntity } from "./db/entity/user.entity";
 import { AuthGuard } from "./auth/auth.guard";
-import { APP_GUARD } from "@nestjs/core";
+import { APP_GUARD, Reflector } from "@nestjs/core";
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
@@ -33,7 +32,7 @@ import { UsersModule } from './users/users.module';
     UsersModule
   ],
   controllers: [AppController],
-  providers: [AppService,AppServicePropertyBaseInjection,TypeOrmConfigService,
+  providers: [AppService,TypeOrmConfigService,ConfigService,Reflector,
     {
       provide: APP_GUARD,
       useClass: AuthGuard

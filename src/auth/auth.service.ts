@@ -9,6 +9,8 @@ export class AuthService {
   private usersService: UsersService
   @Inject()
   private jwtService: JwtService
+  @Inject()
+  private configService: ConfigService;
 
   async signIn(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
@@ -18,7 +20,7 @@ export class AuthService {
     const { password, ...result } = user;
     const payload = { sub: user.userId, username: user.username };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.sign(payload, ),
     };
 
   }

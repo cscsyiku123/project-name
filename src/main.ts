@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NextFunction } from "express";
-import { HttpExceptionFilter } from "./interceptor/http-exception.filter";
 import { GlobalInterceptor } from "./interceptor/global.interceptor";
 import { AuthGuard } from "./auth/auth.guard";
 
