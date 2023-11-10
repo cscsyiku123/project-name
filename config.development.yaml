@@ -5,7 +5,7 @@ jwt:
 db:
   mysql:
     url: localhost
-    port: 3306
+    port: 33060
     username: root
     password:
     database: nest-course

@@ -1,8 +1,6 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { NextFunction } from "express";
-import { GlobalInterceptor } from "./interceptor/global.interceptor";
-import { AuthGuard } from "./auth/auth.guard";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,12 +10,12 @@ async function bootstrap() {
   // };
   // app.use(args)
   // app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new GlobalInterceptor());
-  app.useGlobalGuards(new AuthGuard());
+  // app.useGlobalInterceptors(new GlobalInterceptor());
+  // app.useGlobalGuards(new AuthGuard());
   app.enableCors();
-
 
 
   await app.listen(3000);
 }
+
 bootstrap();

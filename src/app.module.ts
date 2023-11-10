@@ -1,41 +1,43 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 import configuration from "./config/configuration";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { TypeOrmConfigService } from "./db/db.config";
-import { DataSource } from "typeorm";
-import { UserEntity } from "./db/entity/user.entity";
-import { AuthGuard } from "./auth/auth.guard";
-import { APP_GUARD, Reflector } from "@nestjs/core";
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-
+import { APP_INTERCEPTOR, Reflector } from "@nestjs/core";
+import { AuthModule } from "./auth/auth.module";
+import { GlobalInterceptor } from "./interceptor/global.interceptor";
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
+      load: [configuration]
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
-      dataSourceFactory: async (options) => {
-        const dataSource = await new DataSource(options).initialize();
-        return dataSource;
-      },
-      imports: [ConfigModule],
-    }),
-    TypeOrmModule.forFeature([UserEntity]),
-    AuthModule,
-    UsersModule
+
+    // TypeOrmModule.forRootAsync({
+    //   useClass: TypeOrmConfigService,
+    //   dataSourceFactory: async (options) => {
+    //     const dataSource = await new DataSource(options).initialize();
+    //     return dataSource;
+    //   },
+    //   imports: [ConfigModule],
+    // }),
+    // TypeOrmModule.forFeature([UserEntity]),
+    AuthModule
+    // UsersModule
   ],
   controllers: [AppController],
-  providers: [AppService,TypeOrmConfigService,ConfigService,Reflector,
+  providers: [AppService, TypeOrmConfigService, ConfigService, Reflector, GlobalInterceptor,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard
+    // },
     {
-      provide: APP_GUARD,
-      useClass: AuthGuard
-    }],
+      provide: APP_INTERCEPTOR,
+      useClass: GlobalInterceptor
+    }
+  ]
 })
-export class AppModule {}
+export class AppModule {
+}

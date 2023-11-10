@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpException, Inject, Param, Post, Query } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { ConfigService } from "@nestjs/config";
-import { DataSource, Repository } from "typeorm";
+// import { DataSource, Repository } from "typeorm";
 import { UserEntity } from "./db/entity/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
@@ -9,8 +9,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class AppController {
   @Inject()
   private readonly configService: ConfigService;
-  @InjectRepository(UserEntity)
-  private usersRepository: Repository<UserEntity>;
+  // @InjectRepository(UserEntity)
+  // private usersRepository: Repository<UserEntity>;
   @Inject()
   private readonly appService: AppService
 
@@ -32,18 +32,18 @@ export class AppController {
 
   @Get("/getException")
   getException(): string {
-    throw new HttpException("forbidden", 403);
+    throw new HttpException("forbidden1", 404);
   }
 
   @Get("/getConfigService")
   getConfigService(): string {
     return this.configService.get<string>("env")
   }
-  @Get("/getUser")
-  async getUser(): Promise<UserEntity[]> {
-    const users = await this.usersRepository.find()
-    return users;
-  }
+  // @Get("/getUser")
+  // async getUser(): Promise<UserEntity[]> {
+    // const users = await this.usersRepository.find()
+    // return users;
+  // }
 
   getHello() {
     return undefined;
