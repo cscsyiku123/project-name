@@ -1,18 +1,19 @@
-import { Body, Controller, Get, HttpException, Inject, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, Inject, Post, Query } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { ConfigService } from "@nestjs/config";
 // import { DataSource, Repository } from "typeorm";
 import { UserEntity } from "./db/entity/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Controller()
 export class AppController {
   @Inject()
   private readonly configService: ConfigService;
-  // @InjectRepository(UserEntity)
-  // private usersRepository: Repository<UserEntity>;
+  @InjectRepository(UserEntity)
+  private usersRepository: Repository<UserEntity>;
   @Inject()
-  private readonly appService: AppService
+  private readonly appService: AppService;
 
 
   // @Get()
@@ -37,13 +38,17 @@ export class AppController {
 
   @Get("/getConfigService")
   getConfigService(): string {
-    return this.configService.get<string>("env")
+    return this.configService.get<string>("env");
   }
-  // @Get("/getUser")
-  // async getUser(): Promise<UserEntity[]> {
-    // const users = await this.usersRepository.find()
-    // return users;
-  // }
+
+  @Get("/getUser")
+  async getUser(): Promise<UserEntity[]> {
+    const users = await this.usersRepository.find({
+      skip: 0,
+      take: 10
+    });
+    return users;
+  }
 
   getHello() {
     return undefined;

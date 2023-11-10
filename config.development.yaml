@@ -1,11 +1,11 @@
 env: development
 jwt:
-  secret: secret
+  secret: 23123
   expiresIn: 30d
 db:
   mysql:
     url: localhost
-    port: 33060
+    port: 3306
     username: root
     password:
     database: nest-course
