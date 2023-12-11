@@ -13,7 +13,10 @@ export class GlobalInterceptor implements NestInterceptor {
   @Inject()
   private jwtService: JwtService;
 
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler
+  ): Promise<Observable<any>> {
     console.log("global interceptor...");
     let request = context.switchToHttp().getRequest();
     const now = Date.now();
@@ -21,45 +24,63 @@ export class GlobalInterceptor implements NestInterceptor {
     if (roles) {
       const token = this.extractTokenFromHeader(request);
       if (!token) {
-        return of(TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION));
+        return of(
+          TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION)
+        );
       }
       try {
         const payload = await this.jwtService.verifyAsync(token);
         request["user"] = payload;
       } catch {
-        return of(TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION));
+        return of(
+          TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION)
+        );
       }
     }
 
-    return next
-      .handle()
-      .pipe(
-        map(response => {
-          console.log("map response...");
-          return (response instanceof TResponse) ? response : TResponse.getSuccessResponse(response);
-        }),
-        catchError(err => {
-          console.log("catch error...");
-          console.log(err.message);
-          let errorResponse!: TResponse<null>;
-          switch (err.status) {
-            case 401:
-              errorResponse = TResponse.getResponse(null, ResponseCodeConstants.NO_LOGIN);
-              break;
-            case 403:
-              errorResponse = TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION);
-              break;
-            default:
-              errorResponse = TResponse.getErrorResponseDetail(err.status > 0 ? -err.status : err.status, err.message, null);
-              break;
-          }
-          return of(errorResponse);
-        }),
-        tap(() => {
-          console.log(`接收到 method:${request.method},url:${request.url} 请求,耗时:${Date.now() - now}ms`);
-        })
-      )
-      ;
+    return next.handle().pipe(
+      map((response) => {
+        console.log("map response...");
+        return response instanceof TResponse
+          ? response
+          : TResponse.getSuccessResponse(response);
+      }),
+      catchError((err) => {
+        console.error("catch error...");
+        console.error(err.message);
+        console.error(err);
+        let errorResponse!: TResponse<null>;
+        switch (err.status) {
+          case 401:
+            errorResponse = TResponse.getResponse(
+              null,
+              ResponseCodeConstants.NO_LOGIN
+            );
+            break;
+          case 403:
+            errorResponse = TResponse.getResponse(
+              null,
+              ResponseCodeConstants.NO_PERMISSION
+            );
+            break;
+          default:
+            errorResponse = TResponse.getErrorResponseDetail(
+              err && (err.status > 0 ? -err.status : err.status) || ResponseCodeConstants.SYSTEMERROR.code,
+              err.message,
+              null
+            );
+            break;
+        }
+        return of(errorResponse);
+      }),
+      tap(() => {
+        console.log(
+          `接收到 method:${request.method},url:${request.url} 请求,耗时:${
+            Date.now() - now
+          }ms`
+        );
+      })
+    );
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {

@@ -1,4 +1,4 @@
-import { Page } from "../../utils/constants";
+import { Page } from '../../utils/constants';
 
 export class CommentRequest {
   id: number;

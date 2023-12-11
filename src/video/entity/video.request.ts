@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CommonValidStatus } from "../../utils/constants";
 
-@Entity({ name: "video" })
-export class VideoEntity {
+export class VideoRequest {
   @PrimaryGeneratedColumn("increment", { type: "bigint" })
   id: number;
+
+  videoId: number;
 
   @Column({ length: 50 })
   name: string;
@@ -15,7 +16,7 @@ export class VideoEntity {
   @Column({ name: "cover_image_link" })
   coverImageLink: string;
 
-  @Column({ name: "category_tag" })
+  @Column({ name: "category_tag", type: "string" })
   categoryTag: string;
 
   @Column({ name: "second_duration", type: "bigint" })
@@ -39,7 +40,7 @@ export class VideoEntity {
   @Column({ name: "play_link" })
   playLink: string;
 
-  @Column({ name: "author_id", type: "bigint" })
+  @Column({ name: "author_id" })
   authorId: number;
 
   @Column({ name: "valid_status", default: CommonValidStatus.VALID })

@@ -14,10 +14,10 @@ export class AuthService {
   @Inject()
   private configService: ConfigService;
 
-
   public async signIn(signInDto: UserSignInDto): Promise<any> {
     if (signInDto.signInType == UserSignInType.PASSWORD) {
-      const userSignInEntity = await this.usersService.signInByPassword(signInDto);
+      const userSignInEntity =
+        await this.usersService.signInByPassword(signInDto);
       if (userSignInEntity?.password !== signInDto.password) {
         throw new HttpException("用户名或密码错误", -1);
       }
@@ -26,7 +26,11 @@ export class AuthService {
       if (!userEntity) {
         throw new HttpException("用户不存在", -1);
       }
-      const payload = { sub: userEntity.id, username: userEntity.name, avater: userEntity.avaterImageLink };
+      const payload = {
+        sub: userEntity.id,
+        username: userEntity.name,
+        avater: userEntity.avatarImageLink
+      };
       return {
         access_token: await this.jwtService.sign(payload)
       };

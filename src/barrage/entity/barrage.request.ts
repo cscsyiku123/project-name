@@ -1,13 +1,12 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CommonValidStatus, PostType } from "../../utils/constants";
-
+import { PostType } from '../../utils/constants';
 
 export class BarrageRequest {
-
   startSecond: number;
   endSecond: number;
-  videoId: number;
-
-
-
+  postId: number;
+  postType: PostType;
+  secondAppears: number;
+  commentContent: string;
+  commentatorId: number;
+  barrageId: number;
 }

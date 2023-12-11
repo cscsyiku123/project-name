@@ -1,8 +1,8 @@
-import { readFileSync } from "fs";
-import * as yaml from "js-yaml";
-import { EnvironmentType } from "../constants";
+import { readFileSync } from 'fs';
+import * as yaml from 'js-yaml';
+import { EnvironmentType } from '../constants';
 
-var YAML_CONFIG_FILENAME = "config.yaml";
+var YAML_CONFIG_FILENAME = 'config.yaml';
 
 export default () => {
   if (!process.env.NODE_ENV) {
@@ -14,7 +14,5 @@ export default () => {
   // let configFilePath = join(__dirname, YAML_CONFIG_FILENAME);
   let configFilePath = YAML_CONFIG_FILENAME;
   console.log(`加载配置文件：${configFilePath}`);
-  return yaml.load(
-    readFileSync(configFilePath, "utf8")
-  ) as Record<string, any>;
+  return yaml.load(readFileSync(configFilePath, 'utf8')) as Record<string, any>;
 };

@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CommonValidStatus, PostType } from "../../utils/constants";
 
-@Entity({ name: "comment" })
+@Entity({ name: "barrage" })
 @Index(["postId", "rootCommentId", "parentCommentId"])
 @Index(["postId", "secondAppears"])
 export class BarrageEntity {
@@ -9,7 +9,7 @@ export class BarrageEntity {
   id: number;
 
   @Column({ name: "commentator_id", type: "bigint" })
-  commentator_id: number;
+  commentatorId: number;
 
   @Column({ name: "like_count", type: "bigint" })
   likeCount: number;
@@ -41,7 +41,6 @@ export class BarrageEntity {
   @CreateDateColumn({ name: "create_time" })
   createTime: Date;
 
-  @UpdateDateColumn({ name: "update_time"})
+  @UpdateDateColumn({ name: "update_time" })
   updateTime: Date;
-
 }
