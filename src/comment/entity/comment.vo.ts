@@ -3,7 +3,7 @@ import { Page } from "../../utils/constants";
 export class CommentVo {
   id: number;
   commentatorId: number;
-  commentatorName: number;
+  commentatorName: string;
   commentatorAvatarImageLink: string;
   commentContent: string;
   likeCount: number;
@@ -11,7 +11,7 @@ export class CommentVo {
   childrenComment: CommentVo[];
   parentCommentId?: number;
   parentCommentatorId: number;
-  parentCommentatorName: number;
-  create_time: Date;
+  parentCommentatorName: string;
+  createTime: Date;
   page: Page;
 }

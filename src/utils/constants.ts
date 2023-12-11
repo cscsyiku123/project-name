@@ -49,6 +49,12 @@ export class Page {
     this.totalCount = totalCount;
     this.totalPageCount = totalPageCount;
   }
+
+  public static getPage(requestPage:Page, totalCount: number ) {
+    let totalPageCount: number = Math.ceil(totalCount / requestPage.pageSize);
+    return new Page(requestPage.pageIndex, requestPage.pageSize, totalCount, totalPageCount);
+  }
+
 }
 
 export class TResponse<T> {

@@ -28,6 +28,9 @@ export class CommentEntity {
   @Column({ name: "parent_comment_id", type: "bigint" })
   parentCommentId?: number;
 
+  @Column({ name: "parent_commentator_id", type: "bigint" })
+  parentCommentatorId?: number;
+
   @Column({ name: "root_comment_id", type: "bigint" })
   rootCommentId?: number;
 
@@ -35,9 +38,9 @@ export class CommentEntity {
   validStatus: CommonValidStatus;
 
   @CreateDateColumn({ name: "create_time" })
-  create_time: Date;
+  createTime: Date;
 
-  @UpdateDateColumn()
-  update_time: Date;
+  @UpdateDateColumn({ name: "update_time"})
+  updateTime: Date;
 
 }
