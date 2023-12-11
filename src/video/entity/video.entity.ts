@@ -18,8 +18,8 @@ export class VideoEntity {
   @Column({ name: "category_tag", type: "array" })
   categoryTag: Array<string>;
 
-  @Column({ name: "video_duration_seconds", type: "bigint" })
-  videoDurationSeconds: number;
+  @Column({ name: "second_duration", type: "bigint" })
+  secondDuration: number;
 
   @Column({ name: "play_count", type: "bigint" })
   playCount: number;
@@ -36,8 +36,8 @@ export class VideoEntity {
   @Column({ name: "share_count", type: "bigint" })
   shareCount: number;
 
-  @Column({ name: "video_play_link" })
-  videoPlayLink: string;
+  @Column({ name: "play_link" })
+  playLink: string;
 
   @Column({ name: "author_id" })
   authorId: number;
@@ -46,9 +46,10 @@ export class VideoEntity {
   validStatus: CommonValidStatus;
 
   @CreateDateColumn({ name: "create_time" })
-  create_time: Date;
+  createTime: Date;
 
-  @UpdateDateColumn()
-  update_time: Date;
+  @UpdateDateColumn({ name: "update_time"})
+  updateTime: Date;
+
 
 }

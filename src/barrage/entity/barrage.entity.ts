@@ -3,7 +3,7 @@ import { CommonValidStatus, PostType } from "../../utils/constants";
 
 @Entity({ name: "comment" })
 @Index(["postId", "rootCommentId", "parentCommentId"])
-@Index(["postId", "app"])
+@Index(["postId", "secondAppears"])
 export class BarrageEntity {
   @PrimaryGeneratedColumn("increment", { type: "bigint" })
   id: number;
@@ -32,16 +32,16 @@ export class BarrageEntity {
   @Column({ name: "root_comment_id", type: "bigint" })
   rootCommentId?: number;
 
-  @Column({ name: "barrage_appears_time", type: "bigint" })
-  appearsTime: number;
+  @Column({ name: "second_appears", type: "bigint" })
+  secondAppears: number;
 
   @Column({ name: "valid_status", default: CommonValidStatus.VALID })
   validStatus: CommonValidStatus;
 
   @CreateDateColumn({ name: "create_time" })
-  create_time: Date;
+  createTime: Date;
 
-  @UpdateDateColumn()
-  update_time: Date;
+  @UpdateDateColumn({ name: "update_time"})
+  updateTime: Date;
 
 }

@@ -16,9 +16,10 @@ export class UserEntity {
   validStatus: CommonValidStatus;
 
   @CreateDateColumn({ name: "create_time" })
-  create_time: Date;
+  createTime: Date;
 
-  @UpdateDateColumn()
-  update_time: Date;
+  @UpdateDateColumn({ name: "update_time"})
+  updateTime: Date;
+
 
 }
