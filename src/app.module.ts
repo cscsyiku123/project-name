@@ -1,21 +1,25 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import configuration from "./config/configuration";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { TypeOrmConfigService } from "./db/db.config";
 import { APP_INTERCEPTOR, Reflector } from "@nestjs/core";
 import { AuthModule } from "./auth/auth.module";
-import { GlobalInterceptor } from "./interceptor/global.interceptor";
+import { GlobalInterceptor } from "./utils/interceptor/global.interceptor";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "./db/entity/user.entity";
+import { UserEntity } from "./users/entity/user.entity";
 import { DataSource } from "typeorm";
+import { UserSignInEntity } from "./users/entity/user.signIn.entity";
+import { TypeOrmConfigService } from "./utils/conf/mysql.db.config";
+import { VideoModule } from './video/video.module';
+import { CommentModule } from './comment/comment.module';
+import { BarrageModule } from './barrage/barrage.module';
+import envConfiguration from "./utils/conf/env.configuration";
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration]
+      load: [envConfiguration]
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
@@ -25,8 +29,11 @@ import { DataSource } from "typeorm";
       },
       imports: [ConfigModule]
     }),
-    TypeOrmModule.forFeature([UserEntity]),
-    AuthModule
+    TypeOrmModule.forFeature([UserEntity, UserSignInEntity]),
+    AuthModule,
+    VideoModule,
+    CommentModule,
+    BarrageModule
     // UsersModule
   ],
   controllers: [AppController],

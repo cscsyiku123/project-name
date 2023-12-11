@@ -1,16 +1,16 @@
 import { Module } from "@nestjs/common";
-import { UsersService } from "./users.service";
+import { VideoController } from "./video.controller";
+import { VideoService } from "./video.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import * as allEntity from "./entity";
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type";
-
+import * as allEntity from "../users/entity";
 
 @Module({
-  providers: [UsersService],
-  exports: [UsersService],
+  controllers: [VideoController],
+  providers: [VideoService],
   imports: [
     TypeOrmModule.forFeature(Object.values<EntityClassOrSchema>(allEntity))
   ]
 })
-export class UsersModule {
+export class VideoModule {
 }

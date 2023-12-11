@@ -1,9 +1,9 @@
 import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
-import { ResponseCodeConstants, TResponse } from "../config/constants";
+import { ResponseCodeConstants, TResponse } from "../constants";
 import { Reflector } from "@nestjs/core";
-import { Roles } from "../auth/auth.decorator";
+import { Roles } from "src/auth/auth.decorator";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()

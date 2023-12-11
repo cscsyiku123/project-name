@@ -7,6 +7,20 @@ export enum EnvironmentType {
   PRODUCTION = "production",
 }
 
+export enum UserSignInType {
+  PASSWORD,
+  SMS,
+}
+
+export enum CommonValidStatus {
+  DELETE,
+  VALID,
+}
+
+export enum PostType {
+  VIDEO,
+  JOKS,
+}
 
 export class ResponseCodeConstants {
   public static readonly SUCCESS = new ResponseCodeConstants(0, "成功");
@@ -20,6 +34,20 @@ export class ResponseCodeConstants {
   private constructor(code: number, message: string) {
     this.code = code;
     this.message = message;
+  }
+}
+
+export class Page {
+  pageIndex: number;
+  pageSize: number;
+  totalCount: number;
+  totalPageCount: number;
+
+  constructor(pageIndex: number, pageSize: number, totalCount: number, totalPageCount: number) {
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
+    this.totalCount = totalCount;
+    this.totalPageCount = totalPageCount;
   }
 }
 

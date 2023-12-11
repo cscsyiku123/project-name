@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpException, Inject, Post, Query } from "@nest
 import { AppService } from "./app.service";
 import { ConfigService } from "@nestjs/config";
 // import { DataSource, Repository } from "typeorm";
-import { UserEntity } from "./db/entity/user.entity";
+import { UserEntity } from "./users/entity/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 

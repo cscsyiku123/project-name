@@ -1,15 +1,15 @@
-import { Inject, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UsersModule } from "../users/users.module";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { EnvironmentType } from "../config/constants";
+import { EnvironmentType } from "../utils/constants";
 
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService,ConfigService,JwtModule],
+  providers: [AuthService, ConfigService, JwtModule],
   imports: [
     AuthModule,
     UsersModule,
@@ -18,13 +18,13 @@ import { EnvironmentType } from "../config/constants";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret : configService.get<string>('jwt.secret'),
+        secret: configService.get<string>("jwt.secret"),
         ignoreExpiration: process.env.NODE_ENV === EnvironmentType.DEVELOPMENT,
-        signOptions: { expiresIn: configService.get<string>('jwt.expiresIn') }
+        signOptions: { expiresIn: configService.get<string>("jwt.expiresIn") }
       })
     })
   ],
-  exports: [AuthService,]
+  exports: [AuthService]
 })
 export class AuthModule {
 
