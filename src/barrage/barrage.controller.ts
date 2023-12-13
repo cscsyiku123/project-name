@@ -22,7 +22,7 @@ export class BarrageController {
   @Post("/deleteBarrageById")
   @Roles([Role.LOGIN])
   async deleteBarrageById(@Body() barrageRequest: BarrageRequest, @Req() req) {
-    barrageRequest.commentatorId = req.user.id;
+    barrageRequest.commentatorId = req.user.userId;
     return this.barrageService.deleteBarrageById(barrageRequest);
   }
 

@@ -11,7 +11,7 @@ export class CommentController {
 
   @Post("/replyComment")
   async createComment(@Body() commentRequest: CommentRequest, @Req() req) {
-    commentRequest.commentatorId = req.user.id ?? 0;
+    commentRequest.commentatorId = req.user.userId ?? 0;
     return this.commentService.replyCommentByPostId(commentRequest);
   }
 
@@ -23,7 +23,7 @@ export class CommentController {
   @Post("/deleteCommentByCommentId")
   @Roles([Role.LOGIN])
   async deleteCommentByCommentId(@Body() commentRequest: CommentRequest, @Req() req) {
-    commentRequest.commentatorId = req.user.id;
+    commentRequest.commentatorId = req.user.userId;
     return this.commentService.deleteCommentByCommentId(commentRequest);
   }
 }

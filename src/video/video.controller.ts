@@ -18,14 +18,14 @@ export class VideoController {
   @Post("/deleteVideoByVideoId")
   @Roles([Role.LOGIN])
   async deleteVideoByVideoId(@Body() videoRequest: VideoRequest, @Req() req): Promise<any> {
-    videoRequest.authorId = req.user.id;
+    videoRequest.authorId = req.user.userId;
     return this.videoService.deleteVideoByVideoId(videoRequest);
   }
 
   @Post("/findVideoByAuthorId")
   @Roles([Role.LOGIN])
   async findVideoByAuthorId(@Body() videoRequest: VideoRequest, @Req() req): Promise<any> {
-    videoRequest.authorId = req.user.id;
+    videoRequest.authorId = req.user.userId;
     return this.videoService.findVideoByAuthorId(videoRequest);
   }
 
@@ -37,7 +37,7 @@ export class VideoController {
     @Body() videoRequest: VideoRequest,
     @Req() req
   ): Promise<any> {
-    videoRequest.authorId = req.user.id;
+    videoRequest.authorId = req.user.userId;
     return this.videoService.uploadVideo(videoRequest).then((result) => {
       return result > 0 ? TResponse.getSuccessResponse() : TResponse.getResponse(ResponseCodeConstants.UPLOAD_FAIL);
     });

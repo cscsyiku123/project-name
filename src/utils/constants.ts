@@ -7,7 +7,7 @@ export enum EnvironmentType {
   PRODUCTION = "production",
 }
 
-export enum UserSignInType {
+export enum AccountSignUpType {
   PASSWORD,
   SMS,
 }

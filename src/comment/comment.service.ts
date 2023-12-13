@@ -53,7 +53,7 @@ export class CommentService {
             return [commentVo.commentatorId, commentVo.parentCommentatorId];
           })
         );
-        this.usersService.findOneByIds(userIdList).then((userIdMap) => {
+        this.usersService.findByIds(userIdList).then((userIdMap) => {
           result.map((commentVo) => {
             commentVo.commentatorName = userIdMap.get(commentVo.commentatorId)
               ?.name;
@@ -144,7 +144,7 @@ export class CommentService {
               ];
             })
           );
-          this.usersService.findOneByIds(userIdList).then((userIdMap) => {
+          this.usersService.findByIds(userIdList).then((userIdMap) => {
             result.map((commentVo) => {
               commentVo.commentatorName = userIdMap.get(commentVo.commentatorId)
                 ?.name;
