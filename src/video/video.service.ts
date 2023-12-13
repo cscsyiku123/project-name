@@ -33,7 +33,9 @@ export class VideoService {
         validStatus: CommonValidStatus.VALID,
         authorId: videoRequest.authorId
       })
-      .execute();
+      .execute().then((result) => {
+        return result.raw.affectedRows;
+      });
   }
 
   async updateVideoByVideoId(videoRequest: VideoRequest): Promise<any> {

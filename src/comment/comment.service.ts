@@ -195,4 +195,18 @@ export class CommentService {
     commentEntity.validStatus = CommonValidStatus.VALID;
     return this.entityManager.save(CommentEntity, commentEntity);
   }
+
+  deleteCommentByCommentId(commentRequest: CommentRequest) {
+    return this.entityManager.createQueryBuilder().from(CommentEntity, "comment")
+      .update().set({
+        validStatus: CommonValidStatus.DELETE
+      })
+      .where({
+        id: commentRequest.commentId,
+        commentatorId: commentRequest.commentatorId,
+        validStatus: CommonValidStatus.VALID
+      }).execute().then((result) => {
+        return result.raw.affectedRows;
+      });
+  }
 }

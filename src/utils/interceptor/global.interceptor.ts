@@ -23,17 +23,17 @@ export class GlobalInterceptor implements NestInterceptor {
     const roles = this.reflector?.get(Roles, context.getHandler());
     if (roles) {
       const token = this.extractTokenFromHeader(request);
-      if (!token) {
-        return of(
-          TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION)
-        );
-      }
+      // if (!token) {
+      //   return of(
+      //     TResponse.getResponse(ResponseCodeConstants.NO_PERMISSION)
+      //   );
+      // }
       try {
         const payload = await this.jwtService.verifyAsync(token);
         request["user"] = payload;
       } catch {
         return of(
-          TResponse.getResponse(null, ResponseCodeConstants.NO_PERMISSION)
+          TResponse.getResponse(ResponseCodeConstants.NO_PERMISSION)
         );
       }
     }
@@ -53,21 +53,18 @@ export class GlobalInterceptor implements NestInterceptor {
         switch (err.status) {
           case 401:
             errorResponse = TResponse.getResponse(
-              null,
               ResponseCodeConstants.NO_LOGIN
             );
             break;
           case 403:
             errorResponse = TResponse.getResponse(
-              null,
               ResponseCodeConstants.NO_PERMISSION
             );
             break;
           default:
-            errorResponse = TResponse.getErrorResponseDetail(
+            errorResponse = TResponse.getResponseDetail(
               err && (err.status > 0 ? -err.status : err.status) || ResponseCodeConstants.SYSTEMERROR.code,
-              err.message,
-              null
+              err.message
             );
             break;
         }

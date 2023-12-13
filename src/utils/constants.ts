@@ -93,13 +93,13 @@ export class TResponse<T> {
     return this.getResponse(ResponseCodeConstants.SYSTEMERROR, data);
   }
 
-  // public static getErrorResponseDetail<T>(
-  //   code: number,
-  //   message: string,
-  //   data: T
-  // ): TResponse<T> {
-  //   return new TResponse<T>(code, message, data, false);
-  // }
+  public static getResponseDetail<T>(
+    code: number,
+    message: string,
+    data?: T
+  ): TResponse<T> {
+    return new TResponse<T>(code, message, data, code >= 0 ? true : false);
+  }
 
   public static getResponse<T>(
     responseCode: ResponseCodeConstants,

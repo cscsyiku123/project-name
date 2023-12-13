@@ -49,13 +49,16 @@ export class BarrageService {
       .createQueryBuilder()
       .from(BarrageEntity, "barrage")
       .update({
-        validStatus: 0
+        validStatus: CommonValidStatus.DELETE
       })
       .where({
         id: barrageRequest.barrageId,
         validStatus: CommonValidStatus.VALID,
         commentatorId: barrageRequest.commentatorId
       })
-      .execute();
+      .execute()
+      .then((result) => {
+        return result.raw.affectedRows;
+      });
   }
 }
