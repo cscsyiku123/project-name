@@ -4,6 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { AccountSignUpType } from "../utils/constants";
 import { AuthRequest } from "./auth.request";
+import { JwtPayload } from "./jwt.payload";
 
 @Injectable()
 export class AuthService {
@@ -26,12 +27,12 @@ export class AuthService {
       if (!userEntity) {
         throw new HttpException("用户不存在", -1);
       }
-      const payload = {
-        sub: userEntity.id,
-        userId: userEntity.id,
-        username: userEntity.name,
-        avater: userEntity.avatarImageLink
-      };
+      const payload = new JwtPayload(
+        userEntity.id,
+        userEntity.id,
+        userEntity.name,
+        userEntity.avatarImageLink
+      );
       return {
         access_token: await this.jwtService.sign(payload)
       };
