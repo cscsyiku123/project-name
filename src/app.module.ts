@@ -8,7 +8,6 @@ import { GlobalInterceptor } from "./utils/interceptor/global.interceptor";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./users/entity/user.entity";
 import { DataSource } from "typeorm";
-import { UserRe } from "./users/entity/user.signIn.entity";
 import { TypeOrmConfigService } from "./utils/conf/mysql.db.config";
 import { VideoModule } from "./video/video.module";
 import { CommentModule } from "./comment/comment.module";
@@ -28,7 +27,7 @@ import envConfiguration from "./utils/conf/env.configuration";
       },
       imports: [ConfigModule]
     }),
-    TypeOrmModule.forFeature([UserEntity, UserRe]),
+    TypeOrmModule.forFeature([UserEntity]),
     AuthModule,
     VideoModule,
     CommentModule,
