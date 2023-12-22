@@ -1,10 +1,11 @@
 import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
-import { ResponseCodeConstants, TResponse } from "../constants";
+import { ResponseCodeConstants } from "../constants";
 import { Reflector } from "@nestjs/core";
 import { Roles } from "src/auth/auth.decorator";
 import { JwtService } from "@nestjs/jwt";
+import { TResponse } from "../tresponse.dto";
 
 @Injectable()
 export class GlobalInterceptor implements NestInterceptor {

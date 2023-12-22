@@ -10,9 +10,7 @@ export class BarrageService {
   @InjectEntityManager()
   private entityManager: EntityManager;
 
-  async findBarrageBySecondRang(
-    barrageRequest: BarrageRequest
-  ): Promise<any[]> {
+  async findBarrageBySecondRang(barrageRequest: BarrageRequest) {
     return this.entityManager
       .createQueryBuilder()
       .from(BarrageEntity, "barrage")

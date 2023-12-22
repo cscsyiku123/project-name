@@ -1,15 +1,19 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Role, Roles } from "./auth.decorator";
 import { AuthRequest } from "./auth.request";
+import { JwtPayLoadDTO } from "./jwt.dto";
+import { UsersService } from "../users/users.service";
 
 class UserLoginEntity {
 }
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) {
-  }
+  @Inject()
+  private authService: AuthService;
+  @Inject()
+  private userService: UsersService;
 
   @HttpCode(HttpStatus.OK)
   @Post("signIn")
@@ -25,7 +29,7 @@ export class AuthController {
   @Roles([Role.LOGIN])
   @Get("profile")
   getProfile(@Req() req) {
-    let user = req.user;
-    return user;
+    let jwtPayLoad = req.user as JwtPayLoadDTO;
+    return this.userService.findOneById(jwtPayLoad.userId);
   }
 }

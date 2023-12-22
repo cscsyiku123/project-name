@@ -20,6 +20,7 @@ export enum CommonValidStatus {
 export enum PostType {
   VIDEO,
   JOKS,
+
 }
 
 export class ResponseCodeConstants {
@@ -33,83 +34,12 @@ export class ResponseCodeConstants {
   message: string;
 
   private constructor(code: number, message: string) {
+
     this.code = code;
     this.message = message;
   }
 }
 
-export class Page {
-  pageIndex: number;
-  pageSize: number;
-  totalCount: number;
-  totalPageCount: number;
 
-  constructor(
-    pageIndex: number,
-    pageSize: number,
-    totalCount: number,
-    totalPageCount: number
-  ) {
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
-    this.totalCount = totalCount;
-    this.totalPageCount = totalPageCount;
-  }
 
-  public static getPage(requestPage: Page, totalCount: number) {
-    let totalPageCount: number = Math.ceil(totalCount / requestPage.pageSize);
-    return new Page(
-      requestPage.pageIndex,
-      requestPage.pageSize,
-      totalCount,
-      totalPageCount
-    );
-  }
-}
 
-export class TResponse<T> {
-  code: number;
-  message: string;
-  data: T;
-  success: boolean;
-
-  private constructor(
-    code: number,
-    message: string,
-    data: T,
-    success: boolean
-  ) {
-    this.code = code;
-    this.message = message;
-    this.data = data;
-    this.success = success;
-  }
-
-  public static getSuccessResponse<T>(data?: T): TResponse<T> {
-    return this.getResponse(ResponseCodeConstants.SUCCESS, data);
-  }
-
-  public static getErrorResponse<T>(data?: T): TResponse<T> {
-    return this.getResponse(ResponseCodeConstants.SYSTEMERROR, data);
-  }
-
-  public static getResponseDetail<T>(
-    code: number,
-    message: string,
-    data?: T
-  ): TResponse<T> {
-    return new TResponse<T>(code, message, data, code >= 0 ? true : false);
-  }
-
-  public static getResponse<T>(
-    responseCode: ResponseCodeConstants,
-    data?: T
-  ): TResponse<T> {
-    return new TResponse<T>(
-      responseCode.code,
-      responseCode.message,
-      data,
-      responseCode.code >= 0
-    );
-  }
-}
