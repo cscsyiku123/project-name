@@ -3,9 +3,9 @@ import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { ResponseCodeConstants } from "../constants";
 import { Reflector } from "@nestjs/core";
-import { Roles } from "src/auth/auth.decorator";
 import { JwtService } from "@nestjs/jwt";
-import { TResponse } from "../tresponse.dto";
+import { TResponse } from "../common/do/tresponse.dto";
+import { Roles } from "../common/do";
 
 @Injectable()
 export class GlobalInterceptor implements NestInterceptor {

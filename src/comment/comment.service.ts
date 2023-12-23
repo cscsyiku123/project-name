@@ -6,7 +6,7 @@ import { CommentVo } from "./entity/comment.vo";
 import { InjectEntityManager } from "@nestjs/typeorm/dist/common/typeorm.decorators";
 import { CommonValidStatus } from "../utils/constants";
 import { UsersService } from "../users/users.service";
-import { Page } from "../utils/page.dto";
+import { Page } from "../utils/common/do/page.dto";
 
 @Injectable()
 export class CommentService {

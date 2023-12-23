@@ -1,4 +1,4 @@
-import { Page } from "../../utils/page.dto";
+import { Page } from "../../utils/common/do/page.dto";
 
 export class CommentRequest {
   commentId: number;

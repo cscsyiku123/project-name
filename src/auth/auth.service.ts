@@ -4,7 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { AccountSignUpType } from "../utils/constants";
 import { AuthRequest } from "./auth.request";
-import { JwtPayLoadDTO } from "./jwt.dto";
+import { JwtPayLoadDTO } from "../utils/common/do";
 
 @Injectable()
 export class AuthService {

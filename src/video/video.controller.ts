@@ -3,8 +3,8 @@ import { VideoService } from "./video.service";
 import { VideoRequest } from "./entity/video.request";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ResponseCodeConstants } from "../utils/constants";
-import { Role, Roles } from "../auth/auth.decorator";
-import { TResponse } from "../utils/tresponse.dto";
+import { TResponse } from "../utils/common/do/tresponse.dto";
+import { Role, Roles } from "../utils/common/do";
 
 @Controller("video")
 export class VideoController {

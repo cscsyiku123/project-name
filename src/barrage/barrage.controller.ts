@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post, Req } from "@nestjs/common";
 import { BarrageService } from "./barrage.service";
 import { BarrageRequest } from "./entity/barrage.request";
-import { Role, Roles } from "../auth/auth.decorator";
+import { Role, Roles } from "../utils/common/do";
 
 @Controller("barrage")
 export class BarrageController {
