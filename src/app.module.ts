@@ -12,7 +12,7 @@ import { VideoModule } from "./video/video.module";
 import { CommentModule } from "./comment/comment.module";
 import { BarrageModule } from "./barrage/barrage.module";
 import envConfiguration from "./utils/conf/env.configuration";
-import * as allUserEntity from './users/entity';
+import * as allUserEntity from "./users/entity";
 
 @Module({
   imports: [

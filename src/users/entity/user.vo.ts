@@ -1,11 +1,9 @@
-export class JwtPayload {
-  sub: number;
+export class UserVo {
   userId: number;
   userName: string;
   avatarImageLink: string;
 
-  constructor(sub: number, userId: number, userName: string, avatarImageLink: string) {
-    this.sub = sub;
+  constructor(userId: number, userName: string, avatarImageLink: string) {
     this.userId = userId;
     this.userName = userName;
     this.avatarImageLink = avatarImageLink;

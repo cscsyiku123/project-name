@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post, Req } from "@nestjs/common";
 import { CommentRequest } from "./entity/comment.request";
 import { CommentService } from "./comment.service";
-import { Role, Roles } from "../auth/auth.decorator";
+import { Role, Roles } from "../utils/common/do";
 
 @Controller("comment")
 export class CommentController {

@@ -1,6 +1,6 @@
 env: development
 jwt:
-  secret: 23123
+  secret: 642a365b869c5e2f
   expiresIn: 30d
 db:
   mysql:

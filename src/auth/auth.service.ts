@@ -4,17 +4,16 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { AccountSignUpType } from "../utils/constants";
 import { AuthRequest } from "./auth.request";
-import { JwtPayload } from "./jwt.payload";
+import { JwtPayLoadDTO } from "../utils/common/do";
 
 @Injectable()
 export class AuthService {
   @Inject()
   private usersService: UsersService;
   @Inject()
-  private jwtService: JwtService;
-  @Inject()
   private configService: ConfigService;
-
+@Inject()
+private jwtService: JwtService;
   public async signIn(authRequest: AuthRequest) {
     if (authRequest.signInType == AccountSignUpType.PASSWORD) {
       const accountEntity =
@@ -27,7 +26,7 @@ export class AuthService {
       if (!userEntity) {
         throw new HttpException("用户不存在", -1);
       }
-      const payload = new JwtPayload(
+      const payload = new JwtPayLoadDTO(
         userEntity.id,
         userEntity.id,
         userEntity.name,

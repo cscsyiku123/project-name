@@ -10,7 +10,7 @@ export class VideoService {
   @InjectEntityManager()
   private entityManager: EntityManager;
 
-  async findVideoByVideoId(videoRequest: VideoRequest): Promise<any> {
+  async findVideoByVideoId(videoRequest: VideoRequest): Promise<VideoEntity> {
     return this.entityManager
       .createQueryBuilder()
       .from(VideoEntity, "video")
