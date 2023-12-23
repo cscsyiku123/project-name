@@ -15,7 +15,7 @@ export class AuthService {
   @Inject()
   private configService: ConfigService;
 
-  public async signIn(authRequest: AuthRequest): Promise<any> {
+  public async signIn(authRequest: AuthRequest) {
     if (authRequest.signInType == AccountSignUpType.PASSWORD) {
       const accountEntity =
         await this.usersService.findOneAccount(authRequest);
@@ -34,7 +34,7 @@ export class AuthService {
         userEntity.avatarImageLink
       );
       return {
-        access_token: await this.jwtService.sign(payload)
+        access_token: this.jwtService.sign(payload)
       };
     } else if (authRequest.signInType == AccountSignUpType.SMS) {
       throw new HttpException("暂不支持短信登录", -1);
@@ -44,7 +44,7 @@ export class AuthService {
   async signUp(authRequest: AuthRequest) {
     switch (authRequest.signInType) {
       case AccountSignUpType.PASSWORD:
-        this.usersService.findOneAccount(authRequest).then((accountEntity) => {
+        return this.usersService.findOneAccount(authRequest).then((accountEntity) => {
           if (accountEntity) {
             throw new HttpException("用户名已存在", -1);
           } else {
@@ -54,7 +54,7 @@ export class AuthService {
           authRequest.userId = userEntity.id;
           return this.usersService.addAccount(authRequest);
         }).then((accountEntity) => {
-          this.signIn(authRequest);
+          return this.signIn(authRequest);
         });
         break;
       case AccountSignUpType.SMS:
