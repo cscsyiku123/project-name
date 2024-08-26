@@ -7,7 +7,8 @@ import * as allEntity from "./entity";
 import { MulterModule } from "@nestjs/platform-express";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { diskStorage } from "multer";
-import { extname } from "path";
+import { extname, join } from "path";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   controllers: [VideoController],
@@ -26,11 +27,12 @@ import { extname } from "path";
               extname(file.originalname);
             callback(null, path);
           },
-          destination: configService.get<string>("file.upload.dir")
+          destination: join(__dirname, "../../", configService.get<string>("file.upload.dir"))
         })
       }),
       inject: [ConfigService]
-    })
+    }),
+    UsersModule
   ]
 })
 export class VideoModule {

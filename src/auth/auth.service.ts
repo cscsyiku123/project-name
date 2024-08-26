@@ -2,9 +2,9 @@ import { HttpException, Inject, Injectable } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { AccountSignUpType } from "../utils/constants";
-import { AuthRequest } from "./auth.request";
-import { JwtPayLoadDTO } from "../utils/common/do";
+import { AccountSignUpType } from "../common/dto/constants";
+import { AuthRequest } from "./entity/auth.request";
+import { JwtPayLoadDTO } from "../common/dto";
 
 @Injectable()
 export class AuthService {
@@ -12,8 +12,9 @@ export class AuthService {
   private usersService: UsersService;
   @Inject()
   private configService: ConfigService;
-@Inject()
-private jwtService: JwtService;
+  @Inject()
+  private jwtService: JwtService;
+
   public async signIn(authRequest: AuthRequest) {
     if (authRequest.signInType == AccountSignUpType.PASSWORD) {
       const accountEntity =
@@ -33,7 +34,7 @@ private jwtService: JwtService;
         userEntity.avatarImageLink
       );
       return {
-        access_token: this.jwtService.sign(payload)
+        accessToken: this.jwtService.sign({ ...payload })
       };
     } else if (authRequest.signInType == AccountSignUpType.SMS) {
       throw new HttpException("暂不支持短信登录", -1);

@@ -11,4 +11,4 @@ db:
     database: nest-course
 file:
   upload:
-    dir: C:/Users/Administrator/Downloads
+    dir: /public/static/

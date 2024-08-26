@@ -1,4 +1,4 @@
-import { AccountSignUpType } from "../../utils/constants";
+import { AccountSignUpType } from "../../common/dto/constants";
 
 export class UserRequest {
   userId: number;

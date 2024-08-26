@@ -1,4 +1,4 @@
-import { ResponseCodeConstants } from "../../constants";
+import { ResponseCodeConstants } from "./constants";
 
 export class TResponse<T> {
   code: number;

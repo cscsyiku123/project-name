@@ -1,9 +1,9 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AccountSignUpType, CommonValidStatus } from "../../utils/constants";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { AccountSignUpType, CommonValidStatus } from "../../common/dto/constants";
 
 @Entity({ name: "account" })
 @Index(["userId", "signUpType"], { unique: true })
-@Index(["account", "signUpType"], { unique: true })
+@Index(["accountNumber", "signUpType"], { unique: true })
 export class AccountEntity {
   @PrimaryGeneratedColumn("increment", { type: "bigint" })
   id: bigint;
@@ -12,7 +12,7 @@ export class AccountEntity {
   userId: number;
 
   @Column({ length: 50, comment: "账号" })
-  account: string;
+  accountNumber: string;
 
   @Column({ name: "sign_up_type" })
   signUpType: AccountSignUpType;
@@ -23,9 +23,9 @@ export class AccountEntity {
   @Column({ name: "valid_status", default: CommonValidStatus.VALID })
   validStatus: CommonValidStatus;
 
-  @CreateDateColumn({ name: "create_time" })
+  @Column({ name: "create_time", default: () => "CURRENT_TIMESTAMP" })
   createTime: Date;
 
-  @UpdateDateColumn({ name: "update_time" })
+  @Column({ name: "update_time", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
   updateTime: Date;
 }

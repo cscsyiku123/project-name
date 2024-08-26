@@ -3,7 +3,7 @@ import { InjectEntityManager } from "@nestjs/typeorm/dist/common/typeorm.decorat
 import { EntityManager, LessThanOrEqual, MoreThanOrEqual } from "typeorm";
 import { BarrageRequest } from "./entity/barrage.request";
 import { BarrageEntity } from "./entity";
-import { CommonValidStatus } from "../utils/constants";
+import { CommonValidStatus } from "../common/dto/constants";
 
 @Injectable()
 export class BarrageService {
@@ -11,8 +11,9 @@ export class BarrageService {
   private entityManager: EntityManager;
 
   async findBarrageBySecondRang(barrageRequest: BarrageRequest) {
-    return this.entityManager
+    let barrageEntities = await this.entityManager
       .createQueryBuilder()
+      .select("barrage")
       .from(BarrageEntity, "barrage")
       .where({
         postId: barrageRequest.postId,
@@ -23,6 +24,8 @@ export class BarrageService {
         secondAppears: MoreThanOrEqual(barrageRequest.startSecond)
       })
       .getMany();
+    console.log(`barrageEntities: ${JSON.stringify(barrageEntities)}`);
+    return barrageEntities;
   }
 
   async sendBarrage(barrageRequest: BarrageRequest): Promise<number> {
@@ -42,9 +45,10 @@ export class BarrageService {
       });
   }
 
-  async deleteBarrageById(barrageRequest: BarrageRequest): Promise<any> {
+  async deleteBarrageById(barrageRequest: BarrageRequest) {
     return this.entityManager
       .createQueryBuilder()
+      .select("barrage")
       .from(BarrageEntity, "barrage")
       .update({
         validStatus: CommonValidStatus.DELETE
@@ -56,7 +60,7 @@ export class BarrageService {
       })
       .execute()
       .then((result) => {
-        return result.raw.affectedRows;
+        return result.affected;
       });
   }
 }

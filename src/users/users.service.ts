@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { UserEntity } from "./entity/user.entity";
 import { EntityManager, In } from "typeorm";
 import { InjectEntityManager } from "@nestjs/typeorm/dist/common/typeorm.decorators";
-import { AuthRequest } from "../auth/auth.request";
-import { AccountEntity } from "./entity/account.entity";
+import { AuthRequest } from "../auth/entity/auth.request";
+import { AccountEntity } from "../auth/entity/account.entity";
 
 // This should be a real class/interface representing a user entity
 
@@ -19,9 +19,7 @@ export class UsersService {
     });
   }
 
-  async findByIds(
-    ids: number[]
-  ): Promise<Map<number, UserEntity> | undefined> {
+  async findByIds(ids: number[]) {
     return this.entityManager
       .find(UserEntity, { where: { id: In(ids) } })
       .then((users: UserEntity[]) => {
@@ -35,14 +33,14 @@ export class UsersService {
 
   async findOneAccount(authRequst: AuthRequest): Promise<AccountEntity | undefined> {
     return this.entityManager.findOneBy(AccountEntity, {
-      account: authRequst.account,
+      accountNumber: authRequst.account,
       signUpType: authRequst.signInType
     });
   }
 
   async addAccount(authRequst: AuthRequest): Promise<AccountEntity | undefined> {
     return this.entityManager.save(AccountEntity, {
-      account: authRequst.account,
+      accountNumber: authRequst.account,
       password: authRequst.password,
       signUpType: authRequst.signInType,
       userId: authRequst.userId

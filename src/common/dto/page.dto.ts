@@ -1,8 +1,8 @@
 export class Page {
   pageIndex: number;
   pageSize: number;
-  totalCount: number;
-  totalPageCount: number;
+  totalCount?: number;
+  totalPageCount?: number;
 
   constructor(
     pageIndex: number,
@@ -24,5 +24,10 @@ export class Page {
       totalCount,
       totalPageCount
     );
+  }
+
+
+  public static getSkip(requestPage: Page) {
+    return (requestPage.pageIndex - 1) * requestPage.pageSize;
   }
 }

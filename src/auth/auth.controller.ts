@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Inject, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { AuthRequest } from "./auth.request";
+import { AuthRequest } from "./entity/auth.request";
 import { UsersService } from "../users/users.service";
 
 

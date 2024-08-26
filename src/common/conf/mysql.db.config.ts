@@ -1,7 +1,8 @@
-import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { EnvironmentType } from '../constants';
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { EnvironmentType } from "../dto/constants";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -20,6 +21,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       synchronize: process.env.NODE_ENV === EnvironmentType.DEVELOPMENT,
       logging: true,
       autoLoadEntities: true,
+      namingStrategy: new SnakeNamingStrategy()
     };
   }
 }

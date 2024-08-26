@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import * as yaml from "js-yaml";
-import { EnvironmentType } from "../constants";
+import { EnvironmentType } from "../dto/constants";
 
 // var YAML_CONFIG_FILENAME = 'config.yaml';
 

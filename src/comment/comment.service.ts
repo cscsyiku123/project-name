@@ -4,9 +4,10 @@ import { CommentEntity } from "./entity";
 import { CommentRequest } from "./entity/comment.request";
 import { CommentVo } from "./entity/comment.vo";
 import { InjectEntityManager } from "@nestjs/typeorm/dist/common/typeorm.decorators";
-import { CommonValidStatus } from "../utils/constants";
+import { CommonValidStatus } from "../common/dto/constants";
 import { UsersService } from "../users/users.service";
-import { Page } from "../utils/common/do/page.dto";
+import { Page } from "../common/dto/page.dto";
+import { objectConvert } from "../common/utils";
 
 @Injectable()
 export class CommentService {
@@ -14,11 +15,10 @@ export class CommentService {
   @InjectEntityManager() private entityManager: EntityManager;
   @Inject() private readonly usersService: UsersService;
 
-  async findCommentByRootCommentId(
-    request: CommentRequest
-  ): Promise<CommentVo[]> {
+  async findCommentByRootCommentId(request: CommentRequest) {
     return this.entityManager
       .createQueryBuilder()
+      .select("comment")
       .from(CommentEntity, "comment")
       .addOrderBy("comment.createTime", "ASC")
       .where({
@@ -31,75 +31,43 @@ export class CommentService {
       .take(request.page.pageSize)
       .getManyAndCount()
       .then((result) => {
-        let commentVoList: CommentVo[] = [];
-        let commentList: CommentEntity[] = result[0];
-        let commentCount: number = result[1];
-        for (let comment of commentList) {
-          let commentVo: CommentVo = new CommentVo();
-          commentVo.id = comment.id;
-          commentVo.commentContent = comment.commentContent;
-          commentVo.createTime = comment.createTime;
-          commentVo.likeCount = comment.likeCount;
-          commentVo.unlikeCount = comment.unlikeCount;
-          commentVo.commentatorId = comment.commentatorId;
-          commentVo.page = Page.getPage(request.page, commentCount);
-          commentVoList.push(commentVo);
-        }
-        return commentVoList;
-      })
-      .then((result) => {
-        let userIdList: number[] = [];
-        userIdList.push(
-          ...result.flatMap((commentVo) => {
-            return [commentVo.commentatorId, commentVo.parentCommentatorId];
-          })
-        );
-        this.usersService.findByIds(userIdList).then((userIdMap) => {
-          result.map((commentVo) => {
-            commentVo.commentatorName = userIdMap.get(commentVo.commentatorId)
-              ?.name;
-            commentVo.commentatorAvatarImageLink = userIdMap.get(
-              commentVo.commentatorId
-            )?.avatarImageLink;
-            commentVo.parentCommentatorName = userIdMap.get(
-              commentVo.parentCommentatorId
-            )?.name;
-          });
+        return this.commentEntityToVo(result[0]).then((vo) => {
+          if (vo.length > 0) {
+            vo[0].page = Page.getPage(request.page, result[1]);
+          }
+          return vo;
         });
-
-        return result;
       });
   }
 
-  async findCommentByPostId(request: CommentRequest): Promise<CommentVo[]> {
+  async findCommentByPostId(request: CommentRequest) {
     return this.entityManager
       .createQueryBuilder()
+      .select("comment")
       .from(CommentEntity, "comment")
       .addOrderBy("comment.createTime", "DESC")
       .where({
         postId: request.postId,
         postType: request.postType,
-        rootCommentId: null,
+        rootCommentId: 0,
         validStatus: CommonValidStatus.VALID
       })
       .skip((request.page.pageIndex - 1) * request.page.pageSize)
       .take(request.page.pageSize)
       .getManyAndCount()
       .then((result) => {
-        let commentVoList: CommentVo[] = [];
-        let commentList: CommentEntity[] = result[0];
-        let commentCount: number = result[1];
-        for (let comment of commentList) {
-          let commentVo: CommentVo = new CommentVo();
+        return Promise.all(result[0].map((comment) => {
+          let commentVo = new CommentVo();
           commentVo.id = comment.id;
           commentVo.commentContent = comment.commentContent;
           commentVo.createTime = comment.createTime;
           commentVo.likeCount = comment.likeCount;
           commentVo.unlikeCount = comment.unlikeCount;
           commentVo.commentatorId = comment.commentatorId;
-          commentVo.page = Page.getPage(request.page, commentCount);
-          this.entityManager
+          commentVo.page = Page.getPage(request.page, result[1]);
+          return this.entityManager
             .createQueryBuilder()
+            .select("comment")
             .from(CommentEntity, "comment")
             .addOrderBy("comment.createTime", "ASC")
             .where({
@@ -112,10 +80,7 @@ export class CommentService {
             .take(request.page.pageSize)
             .getManyAndCount()
             .then((result) => {
-              let childCommentVoList: CommentVo[] = [];
-              let commentList: CommentEntity[] = result[0];
-              let commentCount: number = result[1];
-              for (let comment of commentList) {
+              commentVo.childrenComment = result[0].map((comment) => {
                 let commentVo: CommentVo = new CommentVo();
                 commentVo.id = comment.id;
                 commentVo.commentContent = comment.commentContent;
@@ -124,17 +89,17 @@ export class CommentService {
                 commentVo.unlikeCount = comment.unlikeCount;
                 commentVo.commentatorId = comment.commentatorId;
                 commentVo.parentCommentatorId = comment.parentCommentatorId;
-                commentVo.page = Page.getPage(request.page, commentCount);
-                childCommentVoList.push(commentVo);
-              }
-              commentVo.childrenComment = childCommentVoList;
+                return commentVo;
+              });
+              commentVo.page = Page.getPage(request.page, result[1]);
+              return commentVo;
+            }).then((result) => {
+              return commentVo;
             });
-          commentVoList.push(commentVo);
-        }
-        return commentVoList;
+        }));
       })
       .then((result) => {
-        result.flatMap((commentVo) => {
+        return Promise.all(result.flatMap((commentVo) => {
           let userIdList: number[] = [];
           userIdList.push(commentVo.commentatorId);
           userIdList.push(
@@ -145,7 +110,7 @@ export class CommentService {
               ];
             })
           );
-          this.usersService.findByIds(userIdList).then((userIdMap) => {
+          return this.usersService.findByIds(userIdList).then((userIdMap) => {
             result.map((commentVo) => {
               commentVo.commentatorName = userIdMap.get(commentVo.commentatorId)
                 ?.name;
@@ -164,37 +129,51 @@ export class CommentService {
                 )?.name;
               });
             });
+            return result;
           });
-        });
-        return result;
+        }))
+          .then((resultP) => {
+            let commentVo1 = new CommentVo();
+            commentVo1.detail = result;
+            commentVo1.page = result[0]?.page;
+            return commentVo1;
+          });
       });
   }
 
-  async replyCommentByPostId(request: CommentRequest): Promise<CommentEntity> {
-    let commentEntity: CommentEntity = new CommentEntity();
-    commentEntity.rootCommentId =
-      request.parentCommentId &&
-      (await this.entityManager
+  async replyCommentByPostId(request: CommentRequest) {
+    let commentEntity: CommentEntity = objectConvert<CommentEntity>(request);
+    if (request.parentCommentId) {
+      await this.entityManager
         .createQueryBuilder()
+        .select("comment")
         .from(CommentEntity, "comment")
         .where({
           postId: request.postId,
           postType: request.postType,
           validStatus: CommonValidStatus.VALID,
-          parentCommentId: request.parentCommentId
+          id: request.parentCommentId
         })
         .getOne()
         .then((result) => {
-          return result.rootCommentId ?? result.parentCommentId ?? result.id;
-        }));
-    commentEntity.parentCommentId = request.parentCommentId;
-    commentEntity.commentatorId = request.commentatorId;
-    commentEntity.commentContent = request.commentContent;
-    commentEntity.postId = request.postId;
-    commentEntity.postType = request.postType;
-    commentEntity.parentCommentatorId = request.parentCommentatorId;
-    commentEntity.validStatus = CommonValidStatus.VALID;
-    return this.entityManager.save(CommentEntity, commentEntity);
+          if (result.rootCommentId != 0) {
+            commentEntity.rootCommentId = result.rootCommentId;
+          } else if (result.parentCommentId != 0) {
+            commentEntity.rootCommentId = result.parentCommentId;
+          } else {
+            commentEntity.rootCommentId = result.id;
+          }
+          commentEntity.parentCommentatorId = result.commentatorId;
+        });
+    }
+
+    return this.entityManager.save(CommentEntity, commentEntity).then((result) => {
+      return this.commentEntityToVo(Array(result)).then((vo) => {
+        let commentVo = vo[0];
+        commentVo.childrenComment = [];
+        return commentVo;
+      });
+    });
   }
 
   deleteCommentByCommentId(commentRequest: CommentRequest) {
@@ -207,7 +186,28 @@ export class CommentService {
         commentatorId: commentRequest.commentatorId,
         validStatus: CommonValidStatus.VALID
       }).execute().then((result) => {
-        return result.raw.affectedRows;
+        return result.affected;
       });
+  }
+
+  private commentEntityToVo(result: CommentEntity[]) {
+    let commentVoList = result.map((comment) => {
+      let commentVo: CommentVo = objectConvert<CommentVo>(comment);
+      return commentVo;
+    });
+    let userIdList: number[] = [];
+    userIdList.push(
+      ...commentVoList.flatMap((commentVo) => {
+        return [commentVo.commentatorId, commentVo.parentCommentatorId];
+      })
+    );
+    return this.usersService.findByIds(userIdList).then((userIdMap) => {
+      commentVoList.map((commentVo) => {
+        commentVo.commentatorName = userIdMap.get(commentVo.commentatorId)?.name;
+        commentVo.commentatorAvatarImageLink = userIdMap.get(commentVo.commentatorId)?.avatarImageLink;
+        commentVo.parentCommentatorName = userIdMap.get(commentVo.parentCommentatorId)?.name;
+      });
+      return commentVoList;
+    });
   }
 }

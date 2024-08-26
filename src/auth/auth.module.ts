@@ -4,7 +4,7 @@ import { AuthService } from "./auth.service";
 import { UsersModule } from "../users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { EnvironmentType } from "../utils/constants";
+import { EnvironmentType } from "../common/dto/constants";
 
 @Module({
   controllers: [AuthController],
@@ -18,18 +18,18 @@ import { EnvironmentType } from "../utils/constants";
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          secret: configService.get<string>("jwt.secret"),
+          secret: configService.get<string>('jwt.secret'),
           verifyOptions: {
-            ignoreExpiration: process.env.NODE_ENV === EnvironmentType.DEVELOPMENT
+            ignoreExpiration:
+              process.env.NODE_ENV === EnvironmentType.DEVELOPMENT,
           },
           signOptions: {
-            expiresIn: configService.get<string>("jwt.expiresIn")
-          }
+            expiresIn: configService.get<string>('jwt.expiresIn'),
+          },
         };
-      }
-    })
+      },
+    }),
   ],
-  exports: [AuthService]
+  exports: [AuthService],
 })
-export class AuthModule {
-}
+export class AuthModule {}

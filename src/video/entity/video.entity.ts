@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CommonValidStatus } from "../../utils/constants";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { CommonValidStatus } from "../../common/dto/constants";
+import { formatTime } from "../../common/utils";
 
 @Entity({ name: "video" })
 export class VideoEntity {
@@ -45,9 +46,24 @@ export class VideoEntity {
   @Column({ name: "valid_status", default: CommonValidStatus.VALID })
   validStatus: CommonValidStatus;
 
-  @CreateDateColumn({ name: "create_time" })
+  @Column({
+    name: "create_time", default: () => "CURRENT_TIMESTAMP", type: "datetime",
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => formatTime(value, "yyyy-MM-dd HH:mm:ss")
+    }
+  })
   createTime: Date;
 
-  @UpdateDateColumn({ name: "update_time" })
+  @Column({
+    name: "update_time",
+    default: () => "CURRENT_TIMESTAMP",
+    onUpdate: "CURRENT_TIMESTAMP",
+    type: "datetime",
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => formatTime(value, "yyyy-MM-dd HH:mm:ss")
+    }
+  })
   updateTime: Date;
 }

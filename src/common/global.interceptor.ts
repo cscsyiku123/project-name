@@ -1,11 +1,11 @@
 import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
-import { ResponseCodeConstants } from "../constants";
+import { ResponseCodeConstants } from "./dto/constants";
 import { Reflector } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
-import { TResponse } from "../common/do/tresponse.dto";
-import { Roles } from "../common/do";
+import { TResponse } from "./dto/tresponse.dto";
+import { Role } from "./dto";
 
 @Injectable()
 export class GlobalInterceptor implements NestInterceptor {
@@ -21,7 +21,7 @@ export class GlobalInterceptor implements NestInterceptor {
     console.log("global interceptor...");
     let request = context.switchToHttp().getRequest();
     const now = Date.now();
-    const roles = this.reflector?.get(Roles, context.getHandler());
+    const roles = this.reflector?.get(Role, context.getHandler());
     if (roles) {
       const token = this.extractTokenFromHeader(request);
       // if (!token) {

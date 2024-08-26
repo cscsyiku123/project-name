@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CommonValidStatus, PostType } from "../../utils/constants";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { CommonValidStatus, PostType } from "../../common/dto/constants";
+import { formatTime } from "../../common/utils";
 
 @Entity({ name: "barrage" })
 @Index(["postId", "rootCommentId", "parentCommentId"])
@@ -38,9 +39,24 @@ export class BarrageEntity {
   @Column({ name: "valid_status", default: CommonValidStatus.VALID })
   validStatus: CommonValidStatus;
 
-  @CreateDateColumn({ name: "create_time" })
+  @Column({
+    name: "create_time", default: () => "CURRENT_TIMESTAMP", type: "datetime",
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => formatTime(value, "yyyy-MM-dd HH:mm:ss")
+    }
+  })
   createTime: Date;
 
-  @UpdateDateColumn({ name: "update_time" })
+  @Column({
+    name: "update_time",
+    default: () => "CURRENT_TIMESTAMP",
+    onUpdate: "CURRENT_TIMESTAMP",
+    type: "datetime",
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: string) => formatTime(value, "yyyy-MM-dd HH:mm:ss")
+    }
+  })
   updateTime: Date;
 }

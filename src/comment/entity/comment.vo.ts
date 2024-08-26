@@ -1,4 +1,4 @@
-import { Page } from "../../utils/common/do/page.dto";
+import { Page } from "../../common/dto/page.dto";
 
 export class CommentVo {
   id: number;
@@ -8,10 +8,12 @@ export class CommentVo {
   commentContent: string;
   likeCount: number;
   unlikeCount: number;
-  childrenComment: CommentVo[];
+  childrenComment?: CommentVo[];
   parentCommentId?: number;
-  parentCommentatorId: number;
-  parentCommentatorName: string;
+  parentCommentatorId?: number;
+  parentCommentatorName?: string;
   createTime: Date;
-  page: Page;
+  page?: Page;
+  rootCommentId?: number;
+  detail?: CommentVo[];
 }
